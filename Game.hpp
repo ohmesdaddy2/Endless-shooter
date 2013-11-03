@@ -100,7 +100,13 @@ public:
         if (selection == 0){
             opening.render(screen);
         }
-        else if (selection == 6){
+        else if (selection ==1){
+            options.render(screen);
+        }
+        else if (selection == 2){
+            resolution.render(screen);
+        }
+        else if (selection == 3){
             for (short i = 0; i < baddies.size(); i++){
                 baddies[i].render(screen);
             }
@@ -111,6 +117,7 @@ public:
     
     int run_game(){
         SDL_Init(SDL_INIT_EVERYTHING);
+        TTF_Init();
         init_video();
         bool done = false;
         //TEMPORARY
@@ -119,48 +126,45 @@ public:
         while(!done){
             while(SDL_PollEvent(&event)){
                 engine::keystroke(keys, event);
-                if (selection == 0){
-                    switch (opening.select(mouse)){
-                        case 0: break;
-                        case 1: break;
-                        case 2: selection = 3; break;
-                        case 3: break;
+                if (mouse.mouseinput(event) == 1){
+                    if (selection == 0){
+                        switch (opening.select(mouse)){
+                            case 1: begin_game(); selection = 3; break;
+                            case 2: selection = 1; break;
+                            case 3: done = true; break;
+                            default: break;
+                        }
                     }
-                }
-                else if (selection == 1){
-                    
-                }
-                else if (selection == 2){
-                    
-                }
-                else if (selection == 3){
-                    switch (options.select(mouse)){
-                        case 0: std::cout<<"This feature is incomplete\n"; break;
-                        case 1: selection = 5; break;
-                        default: break;
+                    else if (selection == 1){
+                        switch (options.select(mouse)){
+                            case 0: std::cout<<"This feature is incomplete\n"; break;
+                            case 2: selection = 2; break;
+                            case 3: selection = 0; break;
+                            default: break;
+                        }
                     }
-                }
-                else if (selection == 4){
-                    
-                }
-                else if (selection == 5){
-                    switch (resolution.select(mouse)){
-                        case 0: screen_tag = 0; init_video(); break;
-                        case 1: screen_tag = 1; init_video(); break;
-                        case 2: screen_tag = 2; init_video();break;
-                        case 3: screen_tag = 3; init_video();break;
-                        case 4: screen_tag = 4; init_video();break;
-                        case 5: screen_tag = 5; init_video();break;
-                        case 6: screen_tag = 6; init_video();break;
-                        case 7: selection = 3; break;
+                    else if (selection == 2){
+                        switch (resolution.select(mouse)){
+                            case 0: screen_tag = 0; break;
+                            case 1: screen_tag = 1; break;
+                            case 2: screen_tag = 2; break;
+                            case 3: screen_tag = 3; break;
+                            case 4: screen_tag = 4; break;
+                            case 5: screen_tag = 5; break;
+                            case 6: screen_tag = 6; break;
+                            case 7: init_video(); break;
+                            case 8: selection = 1; break;
+                            default: break;
+                        }
                     }
+                    
                 }
                 if (event.type == SDL_QUIT){
-                    done = true;
-                }
+                        done = true;
+                    }
             }
             
-            if (selection == 6){
+            if (selection == 3){
                 if (keys[SDLK_a] || keys[SDLK_LEFT]){
                     player.move_left();
                 }
@@ -174,6 +178,7 @@ public:
                     }
                 }
             }
+            boxRGBA(screen, 0, 0, screen->w, screen->h, 0, 0, 0, 255);
             render();
             SDL_Flip(screen);
             SDL_Delay(10);

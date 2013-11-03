@@ -26,17 +26,19 @@ public:
     void place(short a, short b){
         x = a;
         y = b;
+        w = 30;
+        h = 30;
     }
     void move_left(){
         if (x > 0){
             x = x - 2;
-            w = w - 2;
+            //w = w - 2;
         }
     }
     void move_right(SDL_Surface* screen){
         if (w < screen-> w){
             x = x + 2;
-            w = w + 2;
+            //w = w + 2;
         }
     }
     void upgrade_gun(Uint32 type){
@@ -46,7 +48,7 @@ public:
         gun.set_target(z);
     }
     void render(SDL_Surface* screen){
-        boxRGBA(screen, x, y, w, h, 0, 255, 128, 255);
+        boxRGBA(screen, x, y, x + w, y + h, 0, 255, 128, 255);
     }
 };
 

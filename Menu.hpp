@@ -17,33 +17,38 @@ class Main{
 public:
     Main(){
         button[0].label_button("Start Game", 20, 255, 255, 0);
-        button[1].label_button("Load Game", 20, 255, 255, 0);
-        button[2].label_button("Options", 20, 255, 255, 0);
-        button[3].label_button("Quit", 20, 255, 255, 0);
+        button[1].label_button("Options", 20, 255, 255, 0);
+        button[2].label_button("Quit", 20, 255, 255, 0);
+        //std::cout<<"buttons labeled\n";
         button[0].place_button(250, 220);
         button[1].place_button(250, 295);
         button[2].place_button(250, 370);
-        button[3].place_button(250, 445);
-        for (short i = 0; i < 4; i++){
+        //std::cout<<"buttons placed\n";
+        for (short i = 0; i < 3; i++){
             button[i].size_button(250, 50);
         }
-        button[0].place_label(252, 222);
-        button[1].place_label(252, 322);
-        button[2].place_label(252, 422);
-        button[3].place_label(252, 520);
+        //std::cout<<"buttons sized\n";
+        button[0].place_label(325, 232);
+        button[1].place_label(345, 305);
+        button[2].place_label(360, 385);
+        //std::cout<<"labels placed\n";
     }
     
     short select(engine::pointer z){
-        for(short i = 0; i < 4; i++){
-            if (button[i].select_button(z) == true){
-                return i;
-                break;
-            }
+        if (button[0].select_button(z) == true){
+            return 1;
         }
+        else if (button[1].select_button(z)){
+            return 2;
+        }
+        else if (button[2].select_button(z)){
+            return 3;
+        }
+        else return 0;
     }
     
     void render(SDL_Surface* screen){
-        for(short i = 0; i < 4; i++){
+        for(short i = 0; i < 3; i++){
             button[i].draw_button(screen, 128, 64, 0);
         }
     }
@@ -160,39 +165,47 @@ public:
 };*/
 
 class settings{
-    clicker button[2];
+    clicker button[4];
 public:
     settings(){
         button[0].label_button("Audio", 25, 255, 255, 0);
         button[1].label_button("Video", 20, 255, 255, 0);
+        button[2].label_button("Back", 20, 255, 255, 0);
         button[0].place_button(375, 360);
         button[1].place_button(375, 420);
-        for (short i = 0; i < 2; i++){
+        button[2].place_button(375, 460);
+        
+        for (short i = 0; i < 4; i++){
             button[i].size_button(50, 30);
         }
         button[0].place_label(380, 362);
         button[1].place_label(380, 422);
+        button[2].place_label(380, 462);
     }
     
     short select(engine::pointer z){
         if (button[0].select_button(z) == true){
             std::cout<<"Needs finishing up first\n";
+            
         }
         else if (button[1].select_button(z)== true){
             return 2;
+        }
+        else if (button[2].select_button(z) == true){
+            return 3;
         }
         else return 0;
     }
     
     void render(SDL_Surface* screen){
-        for(short i = 0; i < 2; i++){
+        for(short i = 0; i < 3; i++){
             button[i].draw_button(screen, 128, 64, 0);
         }
     }
 };
 
 class visual{
-    clicker button[8];
+    clicker button[9];
 public:
     visual(){
         button[0].label_button("800 x 600", 20, 255, 255, 0);
@@ -202,32 +215,38 @@ public:
         button[4].label_button("1440 x 960", 20, 255, 255, 0);
         button[5].label_button("1680 x 1050", 20, 255, 255, 0);
         button[6].label_button("2048 x 1152", 20, 255, 255, 0);
-        button[7].label_button("Back", 20, 255, 255, 0);
+        button[7].label_button("Apply", 20, 255, 255, 0);
+        button[8].label_button("Back", 20, 255, 255, 0);
         
-        button[0].place_button(250, 350);
-        button[1].place_button(250, 410);
-        button[2].place_button(250, 470);
-        button[3].place_button(250, 530);
-        button[4].place_button(400, 350);
-        button[5].place_button(400, 410);
-        button[6].place_button(400, 470);
-        button[7].place_button(325, 530);
+        button[0].place_button(250, 300);
+        button[1].place_button(250, 350);
+        button[2].place_button(250, 400);
+        button[3].place_button(250, 450);
+        button[4].place_button(400, 300);
+        button[5].place_button(400, 350);
+        button[6].place_button(400, 400);
+        button[7].place_button(400, 450);
+        button[8].place_button(450, 450);
         
-        for(short i = 0; i < 8; i++){
-            button[i].size_button(50, 30);
+        for(short i = 0; i < 7; i++){
+            button[i].size_button(100, 30);
         }
-        button[0].place_label(252, 355);
-        button[1].place_label(252, 415);
-        button[2].place_label(252, 475);
-        button[3].place_label(252, 535);
-        button[4].place_label(402, 355);
-        button[5].place_label(402, 415);
-        button[6].place_label(402, 475);
-        button[7].place_label(330, 535);
+        button[7].size_button(50, 30);
+        button[8].size_button(50, 30);
+        
+        button[0].place_label(252, 305);
+        button[1].place_label(252, 355);
+        button[2].place_label(252, 405);
+        button[3].place_label(252, 455);
+        button[4].place_label(402, 305);
+        button[5].place_label(402, 355);
+        button[6].place_label(402, 405);
+        button[7].place_label(400, 455);
+        button[8].place_label(455, 455);
     }
     
     short select(engine::pointer z){
-        for(short i = 0; i < 8; i++){
+        for(short i = 0; i < 9; i++){
             if (button[i].select_button(z) == true){
                 return i;
                 break;
@@ -236,7 +255,7 @@ public:
     }
     
     void render(SDL_Surface* screen){
-        for (short i = 0; i < 8; i++){
+        for (short i = 0; i < 9; i++){
             button[i].draw_button(screen, 128, 64, 0);
         }
     }

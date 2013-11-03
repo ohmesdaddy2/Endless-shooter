@@ -400,7 +400,10 @@ namespace engine{
     }
     
     void Draw_Text(SDL_Surface* a, SDL_Color wordcolor, std::string input, int size, int x, int y){
-            TTF_Font *font = TTF_OpenFont( "FreeMono.ttf", size);
+            TTF_Font *font = TTF_OpenFont( "data-latin.ttf", size);
+            if (font == NULL){
+                std::cout<<"Duh font is stoopid\n";
+            }
             std::stringstream stuff;
             stuff << input;
             SDL_Surface* Message = TTF_RenderText_Solid( font, stuff.str().c_str(), wordcolor );
