@@ -11,18 +11,13 @@
 #include "gameengine.h"
 
 class bullet{
-    short xSpeed, ySpeed;
 public:
     short x, y, w;
-    short endx, endy;
     bool fired;
 
     bullet(){
-        xSpeed = 0;
-        ySpeed = 0;
-        
         fired = false;
-        w = 10;
+        w = 5;
     }
     void reset(){
         fired = false;
@@ -32,21 +27,11 @@ public:
         w = a;
     }
     
-    void set_angle(short a, short b){
-        endx = a;
-        endy = b;
-        ySpeed = endy - y;
-        xSpeed = (endx - x)/ySpeed;
-        if (endx < x ){
-            xSpeed = -xSpeed;
-        }
-        fired = true;
+    void fly(){
+        y = y - 10;
+        //x = x + xSpeed;
     }
     
-    void fly(){
-        y = y - ySpeed;
-        x = x - xSpeed;
-    }
     void place(short a, short b){
         x = a;
         y = b;

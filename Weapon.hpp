@@ -16,20 +16,24 @@ class weapon{
     short cooldown;
     short damage;
     short version;
-    
+public:
     boost::ptr_vector<bullet> ammo;
     
-public:
     weapon(){
         ammo.resize(1);
         cooldown = 5;
         damage = 10;
     }
-    
+   
     void set_target(engine::pointer z){
-        for(short i = 0; i < ammo.size(); i++){
-            ammo[i].set_angle(z.x, z.y);
-            ammo[i].fired = true;
+        //cooltime();
+        if (cooldown < 1){
+            for(short i = 0; i < ammo.size(); i++){
+                if (!ammo[i].fired){
+                    ammo[i].fired = true;
+                    break;
+                }
+            }
         }
     }
     
@@ -57,19 +61,12 @@ public:
     }
     
     short cooltime(){
-        cooldown--;
+        cooldown = cooldown-2;
         return cooldown;
     }
     
-    void shoot(){
-        if (cooldown == 0){
-            for(short i = 0; i < ammo.size(); i++){
-                if (ammo[i].fired){
-                    ammo[i].fly();
-                }
-            }
-            reset_cooldown();
-        }
+    void show_cooldown(SDL_Surface* screen){
+        boxRGBA(screen, screen->w -cooldown, screen->h - 30, screen->w, screen->h, 0, 128, 0, 255);
     }
     
 };

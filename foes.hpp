@@ -9,20 +9,25 @@
 #define	FOES_HPP
 
 #include "gameengine.h"
+#include "bullets.hpp"
 
 class foe{
-    short x, y, w, h;
     short speed;
     bool dead;
     bool visible;
+    bool landed;
 public:
+    short x, y, w, h;
     bool placed;
     
     foe(){
         dead = false;
         placed = false;
         visible = false;
-        speed = 3;
+        landed = false;
+        speed = 1;
+        x = -60;
+        y = -60;
         w = 50;
         h = 50;
     }
@@ -31,6 +36,7 @@ public:
         x = a;
         y = b;
         placed = true;
+        dead = false;
     }
     
     short get_x(){
@@ -40,8 +46,20 @@ public:
         return w;
     }
     
+    short get_h(){
+        return y + h;
+    }
+    
     void set_speed(short a){
         speed = a;
+    }
+    
+    void die(bullet a){
+        if (a.x > x && a.x < w && a.y > y && a.y < h){
+            std::cout<<"I have died\n";
+            dead = true;
+            placed = false;
+        }
     }
     
     void kill(){
@@ -50,15 +68,17 @@ public:
     }
     
     void fall(){
-        if (placed){
+       if (placed && !landed){
             y = y + speed;
-            h = h + speed;
-        }
+       }
     }
     
     void render(SDL_Surface* screen){
-        if (visible){
-            boxRGBA(screen, x, y, w, h, 128, 64, 0, 255);
+        if (y + h >= screen->h){
+            landed = true;
+        }
+        if (placed){
+            boxRGBA(screen, x, y, x+w, y+h, 128, 64, 0, 255);
         }
     }
 };

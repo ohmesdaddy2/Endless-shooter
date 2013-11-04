@@ -31,13 +31,13 @@ public:
     }
     void move_left(){
         if (x > 0){
-            x = x - 2;
+            x = x - 5;
             //w = w - 2;
         }
     }
     void move_right(SDL_Surface* screen){
         if (w < screen-> w){
-            x = x + 2;
+            x = x + 5;
             //w = w + 2;
         }
     }

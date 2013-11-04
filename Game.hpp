@@ -23,6 +23,7 @@ class game{
     bool keys[323];
     //The selection tracker for the menus
     short selection;
+    int points;
     //The resizable array 
     boost::ptr_vector<foe> baddies;
     
@@ -34,6 +35,7 @@ class game{
     settings options;
     visual resolution;
     character player;
+    weapon gun;
     //The SDL info
     SDL_Event event;
     SDL_Surface* screen;
@@ -43,6 +45,7 @@ public:
         screen_tag = 0;
         selection = 0;
         baddies.resize(1);
+        points = 0;
         
         for(short i = 0; i < 323; i++){
             keys[i] = false;
@@ -53,6 +56,7 @@ public:
         //stored_games = saves();
         options = settings();
         resolution = visual();
+        gun = weapon();
         
     }
     
@@ -74,25 +78,57 @@ public:
     }
     
     void foe_placer(){
-        baddies[0].place(player.getx(), -50);
+        if (baddies[0].placed == false){
+            baddies[0].place(player.getx(), 50);
+            baddies[0].placed = true;
+        }
         
         for(short i = 1; i < baddies.size(); i = i +2){
-            if (i == 0){
-                baddies[i].place(player.getx() - baddies[i].get_w(), -50);
+            if (baddies[i].placed == false){
+                if (i == 1){
+                    baddies[i].place(player.getx() - baddies[i].get_w(), 50);
+                    baddies[i].placed = true;
+                }
+                else {baddies[i].place(baddies[i-2].get_x() - baddies[i-2].get_w(), 50);
+                baddies[i].placed = true;}
             }
-            else baddies[i].place(baddies[i-2].get_x() - baddies[i-2].get_w(), -50);
         }
         
         for (short i = 2; i < baddies.size(); i = i+ 2){
-            if (i == 2){
-                baddies[i].place(baddies[0].get_x() + baddies[0].get_w(), -50);
+            if (baddies[i].placed == false){
+                if (i == 2){
+                    baddies[i].place(baddies[0].get_x() + baddies[0].get_w(), 50);
+                    baddies[i].placed = true;
+                }
+                else {baddies[i].place(baddies[i-2].get_x() + baddies[i-2].get_w(), 50);
+                baddies[i].placed = true;}
             }
-            else baddies[i].place(baddies[i-2].get_x() + baddies[i-2].get_w(), -50);
         }
+        
+        /*for(short i = 2; i < baddies.size(); i++){
+            std::cout<<"bad guy "<<baddies[i].placed<<" has been placed\n";
+        }*/
+        
+        
+    }
+    
+    void foe_slayer(){
+        for (short i = 0; i < gun.ammo.size(); i++){
+            for (short j = 0; j < baddies.size(); j++){
+                if (gun.ammo[i].x > baddies[j].x && gun.ammo[i].x < baddies[j].w && gun.ammo[i].y < baddies[j].h && gun.ammo[i].y > baddies[j].y){
+                    baddies[j].kill();
+                    std::cout<<"baddy "<<j<<"Should be dead now\n";
+                }
+            }
+        }
+        
     }
     
     bool begin_game(){
-        player.place(screen->w/2, screen->h - 100);
+        player.place(screen->w/2, screen->h - 40);
+        gun.set_type(man_Pistol);
+        //short placex = player.getx();
+        //baddies[0].place(placex , 50);
         foe_placer();
     }
     
@@ -110,8 +146,13 @@ public:
             for (short i = 0; i < baddies.size(); i++){
                 baddies[i].render(screen);
             }
-            player.render(screen);
             
+            for(short i = 0; i < gun.ammo.size(); i++){
+                gun.ammo[i].render(screen);
+            }
+            
+            player.render(screen);
+            gun.show_cooldown(screen);
         }
     }
     
@@ -157,11 +198,18 @@ public:
                             default: break;
                         }
                     }
-                    
+                    else if (selection == 3){
+                        gun.set_target(mouse);
+                        gun.reset_cooldown();
+                    }
                 }
                 if (event.type == SDL_QUIT){
                         done = true;
                     }
+            }
+            
+            if (keys[SDLK_ESCAPE]){
+                done = true;
             }
             
             if (selection == 3){
@@ -171,13 +219,24 @@ public:
                 else if (keys[SDLK_d] || keys[SDLK_RIGHT] || keys[SDLK_e]){
                     player.move_right(screen);
                 }
-
-                for (short i = 0; i < baddies.size(); i++){
-                    if (baddies[i].placed){
-                        baddies[i].fall();
+               
+                for(short i = 0; i < gun.ammo.size(); i++){
+                        if (gun.ammo[i].fired){
+                            gun.ammo[i].fly();
+                        }
+                        else if (!gun.ammo[i].fired){
+                            gun.ammo[i].place(player.getx() + 15, screen->h - 40);
+                        }
                     }
+                for (short i = 0; i < baddies.size(); i++){
+                    baddies[i].fall();
+                    //std::cout<<"falling\n";
                 }
+                gun.cooltime();
+                
+                foe_slayer();
             }
+            
             boxRGBA(screen, 0, 0, screen->w, screen->h, 0, 0, 0, 255);
             render();
             SDL_Flip(screen);
