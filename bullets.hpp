@@ -28,7 +28,10 @@ public:
     }
     
     void fly(){
-        y = y - 10;
+        if (y < -5){
+            reset();
+        }
+        else y = y - 10;
         //x = x + xSpeed;
     }
     

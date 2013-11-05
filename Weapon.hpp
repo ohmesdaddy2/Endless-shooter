@@ -40,11 +40,11 @@ public:
     
     void set_type(Uint32 type){
         switch (type){
-            case man_Pistol: cooldown = 100; damage = 10; ammo.resize(10); break;
-            case semi_Pistol: cooldown = 50; damage = 8; ammo.resize(30); break;
-            case man_Rifle: cooldown = 150; damage = 20; ammo.resize(8); break;
-            case semi_Rifle: cooldown = 75; damage = 18; ammo.resize(30); break;
-            case auto_Rifle: cooldown = 20; damage = 15; ammo.resize(50); break;
+            case man_Pistol: cooldown = 10; damage = 10; ammo.resize(100); break;
+            case semi_Pistol: cooldown = 5; damage = 8; ammo.resize(30); break;
+            case man_Rifle: cooldown = 15; damage = 20; ammo.resize(8); break;
+            case semi_Rifle: cooldown = 8; damage = 18; ammo.resize(30); break;
+            case auto_Rifle: cooldown = 2; damage = 15; ammo.resize(50); break;
             default: break;
         }
         version = type;
@@ -52,11 +52,11 @@ public:
     
     void reset_cooldown(){
         switch (version){
-            case man_Pistol: cooldown = 100; break;
-            case semi_Pistol: cooldown = 50; break;
-            case man_Rifle: cooldown = 150; break;
-            case semi_Rifle: cooldown = 75; break;
-            case auto_Rifle: cooldown = 20; break;
+            case man_Pistol: cooldown = 10; break;
+            case semi_Pistol: cooldown = 5; break;
+            case man_Rifle: cooldown = 15; break;
+            case semi_Rifle: cooldown = 8; break;
+            case auto_Rifle: cooldown = 2; break;
             default: break;
         }
     }

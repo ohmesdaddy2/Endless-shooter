@@ -451,9 +451,11 @@ public:
 			    x = 0;
 			    y = 0;
 			    clicking = false;
+                            return 4;
 			    }
 		    if (click.button.button == SDL_BUTTON_RIGHT){
 			    clicking = false;
+                            return 5;
 			    }
 		    }
 	    else if (click.type == SDL_MOUSEMOTION){

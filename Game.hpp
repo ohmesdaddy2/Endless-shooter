@@ -21,6 +21,7 @@ class game{
     short screen_tag;
     //The keys array
     bool keys[323];
+    bool mouse_fire;
     //The selection tracker for the menus
     short selection;
     int points;
@@ -46,7 +47,7 @@ public:
         selection = 0;
         baddies.resize(1);
         points = 0;
-        
+        mouse_fire = false;
         for(short i = 0; i < 323; i++){
             keys[i] = false;
         }
@@ -79,17 +80,17 @@ public:
     
     void foe_placer(){
         if (baddies[0].placed == false){
-            baddies[0].place(player.getx(), 50);
+            baddies[0].place(player.getx(), -50);
             baddies[0].placed = true;
         }
         
         for(short i = 1; i < baddies.size(); i = i +2){
             if (baddies[i].placed == false){
                 if (i == 1){
-                    baddies[i].place(player.getx() - baddies[i].get_w(), 50);
+                    baddies[i].place(player.getx() - baddies[i].get_w(), -50);
                     baddies[i].placed = true;
                 }
-                else {baddies[i].place(baddies[i-2].get_x() - baddies[i-2].get_w(), 50);
+                else {baddies[i].place(baddies[i-2].get_x() - baddies[i-2].get_w(), -50);
                 baddies[i].placed = true;}
             }
         }
@@ -97,10 +98,10 @@ public:
         for (short i = 2; i < baddies.size(); i = i+ 2){
             if (baddies[i].placed == false){
                 if (i == 2){
-                    baddies[i].place(baddies[0].get_x() + baddies[0].get_w(), 50);
+                    baddies[i].place(baddies[0].get_x() + baddies[0].get_w(), -50);
                     baddies[i].placed = true;
                 }
-                else {baddies[i].place(baddies[i-2].get_x() + baddies[i-2].get_w(), 50);
+                else {baddies[i].place(baddies[i-2].get_x() + baddies[i-2].get_w(), -50);
                 baddies[i].placed = true;}
             }
         }
@@ -119,7 +120,13 @@ public:
                     baddies[j].kill();
                     std::cout<<"baddy "<<j<<"Should be dead now\n";
                 }*/
-                baddies[j].die(gun.ammo[i]);
+                if (baddies[j].die(gun.ammo[i]) == true){
+                    baddies.resize(baddies.size() + 1);
+                    gun.ammo[i].reset();
+                    foe_placer();
+                    break;
+                }
+                
             }
         }
         
@@ -200,12 +207,14 @@ public:
                         }
                     }
                     else if (selection == 3){
-                        if (gun.cooldown < 1){
-                            gun.set_target(mouse);
-                            gun.reset_cooldown();
-                        }
+                        mouse_fire = mouse.clicking;
+                        
                     }
                 }
+                else if (mouse.mouseinput(event) == 4){
+                    mouse_fire = false;
+                }
+               
                 if (event.type == SDL_QUIT){
                         done = true;
                     }
@@ -222,7 +231,12 @@ public:
                 else if (keys[SDLK_d] || keys[SDLK_RIGHT] || keys[SDLK_e]){
                     player.move_right(screen);
                 }
-               
+                if (mouse_fire){
+                    if (gun.cooldown < 1){
+                        gun.set_target(mouse);
+                        gun.reset_cooldown();
+                    }
+                }
                 for(short i = 0; i < gun.ammo.size(); i++){
                         if (gun.ammo[i].fired){
                             gun.ammo[i].fly();

@@ -9,6 +9,8 @@
 #define	MENU_HPP
 
 #include "button.hpp"
+#include "boosts.hpp"
+#include "guntypes.hpp"
 #include "gameengine.h"
 
 class Main{
@@ -19,18 +21,22 @@ public:
         button[0].label_button("Start Game", 20, 255, 255, 0);
         button[1].label_button("Options", 20, 255, 255, 0);
         button[2].label_button("Quit", 20, 255, 255, 0);
+        button[3].label_button("Store", 20, 255, 255, 0);
         //std::cout<<"buttons labeled\n";
         button[0].place_button(250, 220);
         button[1].place_button(250, 295);
         button[2].place_button(250, 370);
+        button[3].place_button(500, 50);
         //std::cout<<"buttons placed\n";
         for (short i = 0; i < 3; i++){
             button[i].size_button(250, 50);
         }
+        button[3].size_button(60, 30);
         //std::cout<<"buttons sized\n";
         button[0].place_label(325, 232);
         button[1].place_label(345, 305);
         button[2].place_label(360, 385);
+        button[3].place_label(505, 55);
         //std::cout<<"labels placed\n";
     }
     
@@ -44,11 +50,14 @@ public:
         else if (button[2].select_button(z)){
             return 3;
         }
+        else if (button[3].select_button(z)){
+            return 4;
+        }
         else return 0;
     }
     
     void render(SDL_Surface* screen){
-        for(short i = 0; i < 3; i++){
+        for(short i = 0; i < 4; i++){
             button[i].draw_button(screen, 128, 64, 0);
         }
     }
@@ -258,6 +267,15 @@ public:
         for (short i = 0; i < 9; i++){
             button[i].draw_button(screen, 128, 64, 0);
         }
+    }
+};
+
+class purchasing{
+    clicker button[3];
+public:
+    purchasing(){
+        button[0].label_button("Semi\nAutomatic\nPistol", 20, 255, 255, 0);
+        //button[1].label_button("Ap")
     }
 };
 #endif	/* MENU_HPP */

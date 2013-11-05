@@ -9,9 +9,9 @@
 #define	BOOSTS_HPP
 
 enum boosts{
-    extra_Ammo,
+    //extra_Ammo,
     extra_Damage,
-    extra_Health,
+    //extra_Health,
     extra_Speed,
     extra_Points
 };

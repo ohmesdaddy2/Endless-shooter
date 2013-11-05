@@ -56,10 +56,11 @@ public:
     
     bool die(bullet a){
         if (a.x > x && a.x < x + w && a.y > y && a.y < y + h && placed){
-            std::cout<<"I have died\n";
+            //std::cout<<"I have died\n";
             dead = true;
             placed = false;
-        }
+            return true;
+        }else return false;
     }
     
     void kill(){
