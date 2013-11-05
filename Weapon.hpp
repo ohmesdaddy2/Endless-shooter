@@ -13,10 +13,11 @@
 #include "gameengine.h"
 
 class weapon{
-    short cooldown;
+    
     short damage;
     short version;
 public:
+    short cooldown;
     boost::ptr_vector<bullet> ammo;
     
     weapon(){
@@ -60,9 +61,8 @@ public:
         }
     }
     
-    short cooltime(){
+    void cooltime(){
         cooldown = cooldown-2;
-        return cooldown;
     }
     
     void show_cooldown(SDL_Surface* screen){

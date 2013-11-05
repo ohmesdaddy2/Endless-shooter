@@ -54,8 +54,8 @@ public:
         speed = a;
     }
     
-    void die(bullet a){
-        if (a.x > x && a.x < w && a.y > y && a.y < h){
+    bool die(bullet a){
+        if (a.x > x && a.x < x + w && a.y > y && a.y < y + h && placed){
             std::cout<<"I have died\n";
             dead = true;
             placed = false;

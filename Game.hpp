@@ -115,10 +115,11 @@ public:
     void foe_slayer(){
         for (short i = 0; i < gun.ammo.size(); i++){
             for (short j = 0; j < baddies.size(); j++){
-                if (gun.ammo[i].x > baddies[j].x && gun.ammo[i].x < baddies[j].w && gun.ammo[i].y < baddies[j].h && gun.ammo[i].y > baddies[j].y){
+                /*if (gun.ammo[i].x > baddies[j].x && gun.ammo[i].x < baddies[j].w && gun.ammo[i].y < baddies[j].h && gun.ammo[i].y > baddies[j].y){
                     baddies[j].kill();
                     std::cout<<"baddy "<<j<<"Should be dead now\n";
-                }
+                }*/
+                baddies[j].die(gun.ammo[i]);
             }
         }
         
@@ -199,8 +200,10 @@ public:
                         }
                     }
                     else if (selection == 3){
-                        gun.set_target(mouse);
-                        gun.reset_cooldown();
+                        if (gun.cooldown < 1){
+                            gun.set_target(mouse);
+                            gun.reset_cooldown();
+                        }
                     }
                 }
                 if (event.type == SDL_QUIT){
